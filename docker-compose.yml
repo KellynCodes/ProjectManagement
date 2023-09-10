@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  projectmanagement.worker:
+    image: ${DOCKER_REGISTRY-}projectmanagementworker
+    build:
+      context: .
+      dockerfile: ProjectManagement.Worker\Dockerfile
