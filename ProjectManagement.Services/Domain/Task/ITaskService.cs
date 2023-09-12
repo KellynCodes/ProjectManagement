@@ -25,6 +25,15 @@ namespace ProjectManagement.Services.Domain.Task
         Task<ServiceResponse<TaskDto>> DeleteTaskAsync(Guid projectId, Guid taskId);
 
         /// <summary>
+        /// Update task
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="taskId"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        Task<ServiceResponse<TaskDto>> UpdateTaskAsync(Guid projectId, Guid taskId, TaskDto model);
+
+        /// <summary>
         /// Get tasks by status 
         /// </summary>
         /// <param name="projectId"></param>

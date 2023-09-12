@@ -58,20 +58,14 @@ namespace ProjectManagement.Services.Domain.User
                      requestParameters,
                       predicate: x => !x.DeActivated,
                       orderBy: o => o.OrderBy(x => x.Name.Contains(requestParameters.Keywords)),
-                      include: inc => inc.Include(x => x.Projects.Select(x => new ProjectDto
-                      (
-                          x.Id,
-                          x.Name,
-                          x.Description,
-                          x.CreatedAt
-                      )))
+                      include: inc => inc.Include(x => x.Projects)
                      );
-                IEnumerable<UserRecordDto> userRecord = users.Records.Select(u => new UserRecordDto
+                var userRecord = users.Records.Select(u => new UserRecordDto
                 (
                     u.Name,
                     u.UserName!,
-                    u.Projects!
-                ));
+                    u.Projects.Select(x => new ProjectDto(x.Id, x.UserId, x.Name, x.Description, x.CreatedAt)
+                 )));
 
                 var result = new PaginationResponse<UserRecordDto>
                 (
@@ -106,21 +100,13 @@ namespace ProjectManagement.Services.Domain.User
                     StatusCode = HttpStatusCode.NotFound,
                 };
             }
-            IdentityResult response = await _userManager.DeleteAsync(user);
-            if (!response.Succeeded)
-            {
-                string? message = response.Errors.Select(e => e.Description).FirstOrDefault();
-                return new ServiceResponse<UserDto>
-                {
-                    Message = $"Operation failed with reason: {message}",
-                    StatusCode = HttpStatusCode.BadRequest
-                };
-            }
 
+            user.IsDeleted = true;
+            await _userRepo.UpdateAsync(user);
             return new ServiceResponse<UserDto>
             {
                 StatusCode = HttpStatusCode.OK,
-                Message = $"{user.Name} was deleted.",
+                Message = $"{user.Name} was soft deleted.",
             };
         }
 
@@ -135,22 +121,14 @@ namespace ProjectManagement.Services.Domain.User
                     StatusCode = HttpStatusCode.NotFound,
                 };
             }
-            user = _mapper.Map<ApplicationUser>(model);
-            IdentityResult response = await _userManager.UpdateAsync(user);
-            if (!response.Succeeded)
-            {
-                string? message = response.Errors.Select(e => e.Description).FirstOrDefault();
-                return new ServiceResponse<UserDto>
-                {
-                    Message = $"Operation failed with reason: {message}",
-                    StatusCode = HttpStatusCode.BadRequest
-                };
-            }
-
+            _mapper.Map(model, user);
+            ApplicationUser response = await _userRepo.UpdateAsync(user);
+            UserDto result = new(response.Name, response.UserName!);
             return new ServiceResponse<UserDto>
             {
                 StatusCode = HttpStatusCode.OK,
                 Message = $"{user.Name} your account was updated successfully.",
+                Data = result,
             };
         }
 
@@ -168,26 +146,15 @@ namespace ProjectManagement.Services.Domain.User
 
             var userToPatch = new UserDto(user.Name, user.UserName!);
             model.ApplyTo(userToPatch);
-            user = new ApplicationUser
-            {
-                Name = userToPatch.Name,
-                UserName = userToPatch.UserName,
-            };
-            IdentityResult response = await _userManager.UpdateAsync(user);
-            if (!response.Succeeded)
-            {
-                string? message = response.Errors.Select(e => e.Description).FirstOrDefault();
-                return new ServiceResponse<UserDto>
-                {
-                    Message = $"Operation failed with reason: {message}",
-                    StatusCode = HttpStatusCode.BadRequest
-                };
-            }
-
+            user.Name = userToPatch.Name;
+            user.UserName = userToPatch.UserName;
+            ApplicationUser response = await _userRepo.UpdateAsync(user);
+            UserDto result = new(response.Name, response.UserName!);
             return new ServiceResponse<UserDto>
             {
                 StatusCode = HttpStatusCode.OK,
                 Message = $"{user.Name} your account was updated successfully.",
+                Data = result
             };
         }
     }

@@ -63,10 +63,11 @@ namespace ProjectManagement.Services.Domain.Task
             }
             task = await _taskRepo.UpdateAsync(task);
             TaskDto result = _mapper.Map<TaskDto>(task);
+            string taskAction = action.ToString();
             return new ServiceResponse<TaskDto>
             {
                 Data = result,
-                Message = $"{task.Title} has been assigned to {project.Name}",
+                Message = $"{task.Title} has been {taskAction}ed to {project.Name}",
                 StatusCode = HttpStatusCode.OK
             };
         }
@@ -89,7 +90,7 @@ namespace ProjectManagement.Services.Domain.Task
                 throw new DbUpdateException($"Something unexpected happened while creating task with projectId of {projectId} on {DateTimeOffset.UtcNow}");
             }
 
-            string message = project is not null ? $"{task.Title} has been created under {project.Name}" : "Task has been created. You an assign it to a project later.";
+            string message = project is not null ? $"{task.Title} has been created under {project.Name}" : "Task has been created. You can assign it to a project later.";
             return new ServiceResponse<TaskDto>
             {
                 Data = model,
@@ -113,7 +114,7 @@ namespace ProjectManagement.Services.Domain.Task
                 };
             }
 
-            ProjTask task = await _taskRepo.GetSingleByAsync(x => x.ProjectId == projectId);
+            ProjTask task = await _taskRepo.GetSingleByAsync(x => x.ProjectId == projectId && x.Id == taskId);
             if (task is null)
             {
                 return new ServiceResponse<TaskDto>
@@ -155,7 +156,7 @@ namespace ProjectManagement.Services.Domain.Task
 
             PaginationResult<ProjTask> tasks = await _taskRepo.GetPagedItems(
                 requestParameters,
-                 predicate: t => t.Status == Status.InProgress && t.DueDate == DateTime.UtcNow && t.DueDate.AddDays(7) <= DateTime.UtcNow.AddDays(7),
+                 predicate: t => t.Status == Status.InProgress && t.DueDate.AddDays(7) <= DateTime.UtcNow.AddDays(7),
                  orderBy: o => o.OrderBy(t => t.Priority == Priority.High),
                  include: inc => inc.Include(t => t.Project)
                  );
@@ -195,7 +196,7 @@ namespace ProjectManagement.Services.Domain.Task
 
             PaginationResult<ProjTask> tasks = await _taskRepo.GetPagedItems(
                 requestParameters,
-                 predicate: t => t.Status == status,
+                 predicate: t => t.Status == status && t.IsActive,
                  orderBy: o => o.OrderBy(t => t.Priority == Priority.High),
                  include: inc => inc.Include(t => t.Project)
                  );
@@ -216,6 +217,41 @@ namespace ProjectManagement.Services.Domain.Task
             {
                 Data = result,
                 Message = $"{tasks.TotalRecords} tasks found."
+            };
+        }
+
+        public async Task<ServiceResponse<TaskDto>> UpdateTaskAsync(Guid projectId, Guid taskId, TaskDto model)
+        {
+            Project project = await _projectRepo.GetByIdAsync(projectId);
+            if (project is null)
+            {
+                return new ServiceResponse<TaskDto>
+                {
+                    Message = "Project not found.",
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Data = null
+                };
+            }
+
+            ProjTask task = await _taskRepo.GetSingleByAsync(x => x.ProjectId == projectId && x.Id == taskId);
+            if (task is null)
+            {
+                return new ServiceResponse<TaskDto>
+                {
+                    Message = "Task not found.",
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Data = null
+                };
+            }
+
+            _mapper.Map(model, task);
+            task = await _taskRepo.UpdateAsync(task);
+            TaskDto result = _mapper.Map<TaskDto>(task);
+            return new ServiceResponse<TaskDto>
+            {
+                Data = result,
+                Message = $"{model.Title} has been updated.",
+                StatusCode = HttpStatusCode.OK
             };
         }
     }

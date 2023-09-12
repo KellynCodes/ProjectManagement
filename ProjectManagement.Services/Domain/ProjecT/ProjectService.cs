@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Data.Interfaces;
 using ProjectManagement.Models.Entities.Domains.Project;
+using ProjectManagement.Models.Identity;
 using ProjectManagement.Models.Utility;
 using ProjectManagement.Services.Domain.ProjecT.Dto;
 using ProjectManagement.Services.Utility;
@@ -13,26 +15,37 @@ namespace ProjectManagement.Services.Domain.ProjecT
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<Project> _projectRepo;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
-        public ProjectService(IUnitOfWork unitOfWork, IMapper mapper)
+        public ProjectService(IUnitOfWork unitOfWork, IMapper mapper, UserManager<ApplicationUser> userManager)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _userManager = userManager;
             _projectRepo = _unitOfWork.GetRepository<Project>();
         }
-        public async Task<ServiceResponse<ProjectDto>> CreateProjectAsync(ProjectDto model)
+        public async Task<ServiceResponse<ProjectDto>> CreateProjectAsync(string userId, CreateProjectDto model)
         {
-            if (model is null)
+            ApplicationUser? user = await _userManager.FindByIdAsync(userId);
+
+            if (user is null)
             {
                 return new ServiceResponse<ProjectDto>
                 {
-                    Message = "Payload cannot be empty.",
+                    Message = "User not found.",
                     StatusCode = HttpStatusCode.BadRequest
                 };
             }
 
-            Project project = _mapper.Map<Project>(model);
+
+            Project project = new()
+            {
+                Name = model.Name,
+                Description = model.Description,
+                UserId = userId
+            };
             project = await _projectRepo.AddAsync(project);
+            await _userManager.UpdateAsync(user);
             ProjectDto result = _mapper.Map<ProjectDto>(project);
 
             return new ServiceResponse<ProjectDto>
@@ -43,9 +56,10 @@ namespace ProjectManagement.Services.Domain.ProjecT
             };
         }
 
-        public async Task<ServiceResponse<ProjectDto>> DeleteProjectAsync(Guid projectId)
+        public async Task<ServiceResponse<ProjectDto>> DeleteProjectAsync(string userId, Guid projectId)
         {
-            Project project = await _projectRepo.GetByIdAsync(projectId);
+            Project project = await _projectRepo.GetSingleByAsync(p => p.Id == projectId && p.UserId == userId);
+
             if (project is null)
             {
                 return new ServiceResponse<ProjectDto>
@@ -65,9 +79,10 @@ namespace ProjectManagement.Services.Domain.ProjecT
             };
         }
 
-        public async Task<ServiceResponse<ProjectDto>> GetProjectAsync(Guid projectId)
+        public async Task<ServiceResponse<ProjectDto>> GetProjectAsync(string userId, Guid projectId)
         {
-            Project project = await _projectRepo.GetByIdAsync(projectId);
+            Project project = await _projectRepo.GetSingleByAsync(p => p.Id == projectId && p.UserId == userId);
+
             if (project is null)
             {
                 return new ServiceResponse<ProjectDto>
@@ -101,7 +116,7 @@ namespace ProjectManagement.Services.Domain.ProjecT
                 return new ServiceResponse<PaginationResponse<ProjectDto>>
                 {
                     Data = null,
-                    Message = "Task is empty.",
+                    Message = "Project is empty.",
                     StatusCode = HttpStatusCode.NoContent
                 };
             }
@@ -110,14 +125,15 @@ namespace ProjectManagement.Services.Domain.ProjecT
             return new ServiceResponse<PaginationResponse<ProjectDto>>
             {
                 Data = result,
-                Message = $"{projects.TotalRecords} tasks found.",
+                Message = $"{projects.TotalRecords} projects found.",
                 StatusCode = HttpStatusCode.OK
             };
         }
 
-        public async Task<ServiceResponse<ProjectDto>> UpdateProjectAsync(Guid projectId, ProjectDto model)
+        public async Task<ServiceResponse<ProjectDto>> UpdateProjectAsync(string userId, Guid projectId, ProjectUpdateDto model)
         {
-            Project project = await _projectRepo.GetByIdAsync(projectId);
+            Project project = await _projectRepo.GetSingleByAsync(p => p.Id == projectId && p.UserId == userId);
+
             if (project is null)
             {
                 return new ServiceResponse<ProjectDto>
@@ -128,13 +144,16 @@ namespace ProjectManagement.Services.Domain.ProjecT
                 };
             }
 
+            _mapper.Map(model, project);
             await _projectRepo.UpdateAsync(project);
+
             return new ServiceResponse<ProjectDto>
             {
-                Message = $"{project.Name} has been deleted.",
+                Message = $"{project.Name} has been updated.",
                 StatusCode = HttpStatusCode.OK
             };
         }
+
     }
 }
 

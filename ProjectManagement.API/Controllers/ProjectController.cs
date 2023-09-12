@@ -21,14 +21,15 @@ public class ProjectController : BaseController
     /// <summary>
     /// Create new project
     /// </summary>
+    /// <param name="userId"></param>
     /// <param name="model"></param>
     /// <returns></returns>
-    [HttpPost]
+    [HttpPost("{userId}")]
     [ProducesResponseType(200, Type = typeof(ApiResponse<ProjectDto>))]
     [ProducesResponseType(400, Type = typeof(ApiResponse))]
-    public async Task<IActionResult> CreateTask([FromBody] ProjectDto model)
+    public async Task<IActionResult> CreateTask([FromRoute] string userId, [FromBody] CreateProjectDto model)
     {
-        ServiceResponse<ProjectDto> response = await _projectService.CreateProjectAsync(model);
+        ServiceResponse<ProjectDto> response = await _projectService.CreateProjectAsync(userId, model);
         return ComputeResponse(response);
     }
 
@@ -36,27 +37,27 @@ public class ProjectController : BaseController
     /// Update project
     /// </summary>
     /// <param name="projectId"></param>
+    /// <param name="userId"></param>
     /// <param name="model"></param>
     /// <returns></returns>
-    [HttpPut("update/{projectId}")]
+    [HttpPut("update/{userId}/{projectId}")]
     [ProducesResponseType(200, Type = typeof(ApiResponse<ProjectDto>))]
     [ProducesResponseType(400, Type = typeof(ApiResponse))]
-    public async Task<IActionResult> UpdateProject([FromRoute] Guid projectId, [FromBody] ProjectDto model)
+    public async Task<IActionResult> UpdateProject([FromRoute] string userId, [FromRoute] Guid projectId, [FromBody] ProjectUpdateDto model)
     {
-        ServiceResponse<ProjectDto> response = await _projectService.UpdateProjectAsync(projectId, model);
+        ServiceResponse<ProjectDto> response = await _projectService.UpdateProjectAsync(userId, projectId, model);
         return ComputeResponse(response);
     }
 
     /// <summary>
     /// Get all project
     /// </summary>
-    /// <param name="projectId"></param>
     /// <param name="requestParameters"></param>
     /// <returns></returns>
     [HttpGet("get-all")]
     [ProducesResponseType(200, Type = typeof(ApiRecordResponse<PaginationResponse<ProjectDto>>))]
     [ProducesResponseType(400, Type = typeof(ApiResponse))]
-    public async Task<IActionResult> GetTasksByDueDateForTheWeek([FromQuery] RequestParameters requestParameters)
+    public async Task<IActionResult> GetProjects([FromQuery] RequestParameters requestParameters)
     {
         ServiceResponse<PaginationResponse<ProjectDto>> response = await _projectService.GetProjectsAsync(requestParameters);
         return ComputeResponse(response);
@@ -67,12 +68,21 @@ public class ProjectController : BaseController
     /// </summary>
     /// <param name="projectId"></param>
     /// <returns></returns>
-    [HttpGet("get/{projectId}")]
-    [ProducesResponseType(200, Type = typeof(ApiRecordResponse<ProjectDto>))]
+    [HttpGet("get/{userId}/{projectId}")]
+    [ProducesResponseType(200, Type = typeof(ApiResponse<ProjectDto>))]
     [ProducesResponseType(400, Type = typeof(ApiResponse))]
-    public async Task<IActionResult> GetDueTasksByStatus([FromRoute] Guid projectId)
+    public async Task<IActionResult> GetProject([FromRoute] string userId, [FromRoute] Guid projectId)
     {
-        ServiceResponse<ProjectDto> response = await _projectService.GetProjectAsync(projectId);
+        ServiceResponse<ProjectDto> response = await _projectService.GetProjectAsync(userId, projectId);
+        return ComputeResponse(response);
+    }
+
+    [HttpDelete("delete/{userId}/{projectId}")]
+    [ProducesResponseType(200, Type = typeof(ApiResponse<ProjectDto>))]
+    [ProducesResponseType(400, Type = typeof(ApiResponse))]
+    public async Task<IActionResult> DeleteProject([FromRoute] string userId, [FromRoute] Guid projectId)
+    {
+        ServiceResponse<ProjectDto> response = await _projectService.DeleteProjectAsync(userId, projectId);
         return ComputeResponse(response);
     }
 }

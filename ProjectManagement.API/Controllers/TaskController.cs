@@ -25,10 +25,10 @@ public class TaskController : BaseController
     /// <param name="projectId"></param>
     /// <param name="model"></param>
     /// <returns></returns>
-    [HttpPost("{projectId}")]
+    [HttpPost]
     [ProducesResponseType(200, Type = typeof(ApiResponse<TaskDto>))]
     [ProducesResponseType(400, Type = typeof(ApiResponse))]
-    public async Task<IActionResult> createTask([FromBody] TaskDto model, [FromRoute] Guid? projectId = null)
+    public async Task<IActionResult> CreateTask([FromBody] TaskDto model, Guid? projectId = null)
     {
         ServiceResponse<TaskDto> response = await _taskService.CreateTaskAsync(projectId, model);
         return ComputeResponse(response);
@@ -41,7 +41,7 @@ public class TaskController : BaseController
     /// <param name="taskId"></param>
     /// <param name="taskAction"></param>
     /// <returns></returns>
-    [HttpPut("update/{projectId}/{taskId}/{taskAction}")]
+    [HttpPut("assign/{projectId}/{taskId}/{taskAction}")]
     [ProducesResponseType(200, Type = typeof(ApiResponse<TaskDto>))]
     [ProducesResponseType(400, Type = typeof(ApiResponse))]
     public async Task<IActionResult> AssignOrRemoveTaskFromAProject([FromRoute] Guid projectId, [FromRoute] Guid taskId, [FromRoute] TaskAction taskAction)
@@ -71,6 +71,15 @@ public class TaskController : BaseController
     public async Task<IActionResult> GetDueTasksByStatus([FromRoute] Guid projectId, [FromRoute] Status status, [FromQuery] RequestParameters requestParameters)
     {
         ServiceResponse<PaginationResponse<TaskDto>> response = await _taskService.GetTasksByStatusAsync(projectId, status, requestParameters);
+        return ComputeResponse(response);
+    }
+
+    [HttpPut("update/{projectId}/{taskId}")]
+    [ProducesResponseType(200, Type = typeof(ApiResponse<TaskDto>))]
+    [ProducesResponseType(400, Type = typeof(ApiResponse))]
+    public async Task<IActionResult> UpdateProject([FromRoute] Guid projectId, [FromRoute] Guid taskId, [FromBody] TaskDto model)
+    {
+        ServiceResponse<TaskDto> response = await _taskService.UpdateTaskAsync(projectId, taskId, model);
         return ComputeResponse(response);
     }
 }

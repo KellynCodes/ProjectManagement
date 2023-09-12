@@ -6,8 +6,8 @@ namespace ProjectManagement.Models.Entities.Domains.Project
     {
         public string Name { get; set; } = default!;
         public string Description { get; set; } = default!;
-        public string userId { get; set; } = null!;
-        public virtual ICollection<ApplicationUser> User { get; set; } = default!;
+        public string UserId { get; set; } = null!;
+        public virtual ApplicationUser User { get; set; } = default!;
         public virtual ICollection<ProjTask> Tasks { get; set; } = default!;
     }
 }
