@@ -1,9 +1,11 @@
 ﻿using ProjectManagement.AsyncClient.Interfaces;
 using ProjectManagement.Models.Configuration;
+using ProjectManagement.Models.Entities.Domains.Notification;
 using ProjectManagement.Models.Enums;
 using ProjectManagement.Services.Domain.Notification.Dtos;
 using ProjectManagement.Services.Domains.Notification.Dtos;
 using ProjectManagement.Services.Domains.Security;
+using ProjectManagement.Services.Utility;
 
 namespace ProjectManagement.Services.Domains.Notification;
 public class NotificationManagerService : INotificationManagerService
@@ -40,7 +42,12 @@ public class NotificationManagerService : INotificationManagerService
             MessageId = messageId
         };
 
-        await _commandClient.SendCommand(_appSetting.QueueConfiguration.NotificationQueueUrl, command, cancellationToken);
+        await _commandClient.SendCommand(_appSetting.QueueConfiguration.EmailQueueUrl, command, cancellationToken);
+    }
+
+    public async Task<ServiceResponse<NotificationDto>> MarkNotificationAsReadOrUnreadAsync(NotificationStatus notificationStatus)
+    {
+        throw new NotImplementedException();
     }
 
     private string GenerateSubject(OtpOperation operation)

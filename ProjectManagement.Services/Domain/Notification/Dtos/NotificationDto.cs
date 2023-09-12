@@ -2,7 +2,7 @@
 
 namespace ProjectManagement.Models.Entities.Domains.Notification
 {
-    public class NotificationDto
+    public record NotificationDto
     {
         public DateTimeOffset TimeStamp { get; set; }
         public string Message { get; set; } = string.Empty;

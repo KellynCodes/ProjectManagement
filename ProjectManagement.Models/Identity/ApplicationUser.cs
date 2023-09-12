@@ -10,5 +10,5 @@ public class ApplicationUser : IdentityUser
     public bool DeActivated { get; set; }
     public UserRole UserRole { get; set; }
     public Guid? ProjectId { get; set; }
-    public virtual Project? Project { get; set; }
+    public virtual ICollection<Project> Projects { get; set; } = null!;
 }

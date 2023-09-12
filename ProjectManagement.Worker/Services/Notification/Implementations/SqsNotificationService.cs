@@ -1,15 +1,16 @@
 ﻿using ProjectManagement.Services.Domain.Notification.Dtos;
 using ProjectManagement.Services.EmailProviders.Interfaces;
 using ProjectManagement.Services.Utility;
+using ProjectManagement.Worker.Services.Notification.Interfaces;
 using System.Net;
 
-namespace ProjectManagement.Worker.Services;
-public class NotificationReceivedService : INotificationReceivedService
+namespace ProjectManagement.Worker.Services.Notification.Implementations;
+public class SqsNotificationService : ISqsNotificationService
 {
     //private readonly ISmsClient _smsClient;
     private readonly ILogger<Worker> _logger;
     private readonly IEmailProviderService _emailProcessor;
-    public NotificationReceivedService(IEmailProviderService emailProcessor, ILogger<Worker> logger = null)
+    public SqsNotificationService(IEmailProviderService emailProcessor, ILogger<Worker> logger = null)
     {
         _logger = logger;
         _emailProcessor = emailProcessor;

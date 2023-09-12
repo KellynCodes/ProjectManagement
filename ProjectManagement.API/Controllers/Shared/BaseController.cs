@@ -45,6 +45,10 @@ public class BaseController : ControllerBase
                 response = new ApiRecordResponse<T>(false, serviceResponse.Message, serviceResponse.Data);
                 return NotFound(response);
 
+            case HttpStatusCode.NoContent:
+                response = new ApiRecordResponse<T>(false, serviceResponse.Message, serviceResponse.Data);
+                return NotFound(response);
+
             case HttpStatusCode.BadRequest:
                 response = new ApiRecordResponse<T>(false, serviceResponse.Message, serviceResponse.Data);
                 return BadRequest(response);
@@ -69,6 +73,10 @@ public class BaseController : ControllerBase
                 return Unauthorized(response);
 
             case HttpStatusCode.NotFound:
+                response = new ApiResponse<T>(false, serviceResponse.Message, serviceResponse.Data);
+                return NotFound(response);
+
+            case HttpStatusCode.NoContent:
                 response = new ApiResponse<T>(false, serviceResponse.Message, serviceResponse.Data);
                 return NotFound(response);
 

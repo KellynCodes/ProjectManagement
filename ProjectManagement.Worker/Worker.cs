@@ -1,12 +1,12 @@
-using ProjectManagement.Worker.Services;
+using ProjectManagement.Worker.Services.Notification.Interfaces;
 
 namespace ProjectManagement.Worker
 {
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
-        private readonly INotificationReceivedEventHandler _notificationReceivedEventHandler;
-        public Worker(ILogger<Worker> logger, INotificationReceivedEventHandler notificationReceivedEventHandler)
+        private readonly ISqsNotificationEventHandler _notificationReceivedEventHandler;
+        public Worker(ILogger<Worker> logger, ISqsNotificationEventHandler notificationReceivedEventHandler)
         {
             _logger = logger;
             _notificationReceivedEventHandler = notificationReceivedEventHandler;

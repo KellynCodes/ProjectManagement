@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using ProjectManagement.Data.Interfaces;
+using ProjectManagement.Models.Utility;
 using System.Linq.Expressions;
 
 namespace ProjectManagement.Data.Implementation
@@ -316,14 +317,20 @@ namespace ProjectManagement.Data.Implementation
             return await _dbSet.FindAsync(id);
         }
 
-        //public async Task<PagedList<T>> GetPagedItems(RequestParameters parameters, Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
-        //{
-        //    var skip = (parameters.PageNumber - 1) * parameters.PageSize;
-        //    var items = await ConstructQueryable(predicate, parameters.OrderBy.ToLower(), skip, parameters.PageSize, include).ToListAsync();
-        //    var count = await CountAsync(predicate);
-        //    return new PagedList<T>(items, count, parameters.PageNumber, parameters.PageSize);
-        //}
-
+        public async Task<PaginationResult<T>> GetPagedItems(RequestParameters parameters, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy, Expression<Func<T, bool>>? predicate = null, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null, bool disableTracking = true)
+        {
+            int MAX_PAGE_SIZE = 50;
+            var skip = (parameters.PageNumber - 1) * parameters.PageSize;
+            var items = await ConstructQuery(predicate, orderBy, skip, parameters.PageSize, include, disableTracking).ToListAsync();
+            return new PaginationResult<T>
+            {
+                PageSize = items.Count,
+                TotalPages = items.Count / MAX_PAGE_SIZE,
+                CurrentPage = parameters.PageNumber,
+                Records = items,
+                TotalRecords = items.Count,
+            };
+        }
 
         public virtual IQueryable<T> GetQueryable(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, int? skip = null, int? take = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
@@ -503,6 +510,37 @@ namespace ProjectManagement.Data.Implementation
         private IQueryable<T> ConstructQuery(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy, int? skip, int? take, Func<IQueryable<T>, IIncludableQueryable<T, object>> include)
         {
             IQueryable<T> query = _dbSet;
+
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+
+            if (include != null) query = include(query);
+
+            if (skip != null)
+            {
+                query = query.Skip(skip.Value);
+            }
+
+            if (take != null)
+            {
+                query = query.Take(take.Value);
+            }
+
+            return query;
+        }
+
+        private IQueryable<T> ConstructQuery(Expression<Func<T, bool>>? predicate, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy, int? skip, int? take, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include, bool disableTracking)
+        {
+            IQueryable<T> query = _dbSet;
+
+            if (disableTracking) query = query.AsNoTracking();
 
             if (predicate != null)
             {

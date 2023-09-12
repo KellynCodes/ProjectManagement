@@ -8,7 +8,8 @@ using ProjectManagement.Models.Configuration;
 using ProjectManagement.Services.EmailProviders.Implementations;
 using ProjectManagement.Services.EmailProviders.Interfaces;
 using ProjectManagement.Worker;
-using ProjectManagement.Worker.Services;
+using ProjectManagement.Worker.Services.Notification.Implementations;
+using ProjectManagement.Worker.Services.Notification.Interfaces;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((hostContext, services) =>
@@ -17,7 +18,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         var appSettings = new AppSetting();
         configuration.GetSection("AppSetting").Bind(appSettings);
         services.AddSingleton(appSettings);
-        services.AddTransient<INotificationReceivedEventHandler, NotificationReceivedEventHandler>();
+        services.AddTransient<ISqsNotificationEventHandler, SqsNotificationEventHandler>();
         services.AddTransient<IS3Client, S3Client>();
         services.AddTransient<IEmailProviderService, EmailProviderService>();
 
@@ -25,7 +26,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddTransient<Func<ICommandClient>>(sp => () => sp.GetService<ICommandClient>());
 
         // Register the INotificationReceivedService (assuming its implementation is NotificationReceivedService)
-        services.AddTransient<INotificationReceivedService, NotificationReceivedService>();
+        services.AddTransient<ISqsNotificationService, SqsNotificationService>();
 
         services.AddHostedService<Worker>();
         services.AddDefaultAWSOptions(configuration.GetAWSOptions("AppSetting:AWS"));

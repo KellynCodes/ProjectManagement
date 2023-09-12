@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using ProjectManagement.Data.Seeder;
 using ProjectManagement.Extensions;
 using ProjectManagement.Middlewares;
 using ProjectManagement.Models.Configuration;
 using ProjectManagement.Models.DatabaseContexts;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 IConfiguration Configuration = builder.Configuration;
@@ -29,8 +31,7 @@ services.Configure<ApiBehaviorOptions>(options =>
 });
 
 //Register Automapper
-var domain = AppDomain.CurrentDomain.GetAssemblies();
-//services.AddAutoMapper(domain);
+services.AddAutoMapper(Assembly.Load("ProjectManagement.Services"));
 
 // Add services to the container.
 IServiceProvider serviceProvider = services.BuildServiceProvider();
@@ -98,5 +99,5 @@ app.ConfigureExceptionHandler();
 app.MapControllers();
 
 await context.Database.MigrateAsync();
-
+await Seed.EnsurePopulatedAsync(app);
 await app.RunAsync();

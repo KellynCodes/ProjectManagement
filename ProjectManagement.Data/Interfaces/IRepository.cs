@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore.Query;
+using ProjectManagement.Models.Utility;
 using System.Linq.Expressions;
 
 namespace ProjectManagement.Data.Interfaces
 {
-    public interface IRepository<T>
+    public interface IRepository<T> where T : class
     {
         T Add(T obj);
 
@@ -66,6 +67,8 @@ namespace ProjectManagement.Data.Interfaces
         Task<bool> AnyAsync(Expression<Func<T, bool>> predicate = null);
 
         bool Any(Expression<Func<T, bool>> predicate = null);
+
+        Task<PaginationResult<T>> GetPagedItems(RequestParameters parameters, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy, Expression<Func<T, bool>>? predicate = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, bool disableTracking = true);
 
         IQueryable<T> GetQueryable(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, int? skip = null, int? take = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
 

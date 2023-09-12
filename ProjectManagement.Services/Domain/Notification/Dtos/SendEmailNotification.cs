@@ -1,4 +1,6 @@
-﻿namespace ProjectManagement.Services.Domain.Notification.Dtos;
+﻿using ProjectManagement.Models.Domains.Security.Enums;
+
+namespace ProjectManagement.Services.Domain.Notification.Dtos;
 
 public class SendEmailNotification
 {
@@ -12,4 +14,5 @@ public class SendEmailNotification
     public string Content { get; set; } = null!;
     public string Source { get; set; } = null!;
     public string MessageId { get; set; } = null!;
+    public NotificationType NotificationType { get; set; }
 }

@@ -9,6 +9,9 @@ using ProjectManagement.Data.Interfaces;
 using ProjectManagement.Models.Configuration;
 using ProjectManagement.Models.DatabaseContexts;
 using ProjectManagement.Models.Identity;
+using ProjectManagement.Services.Domain.ProjecT;
+using ProjectManagement.Services.Domain.Task;
+using ProjectManagement.Services.Domain.User;
 using ProjectManagement.Services.Domains.Auth;
 using ProjectManagement.Services.Domains.Notification;
 using ProjectManagement.Services.Domains.Security;
@@ -27,6 +30,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped<INotificationManagerService, NotificationManagerService>();
         services.AddScoped<IOtpCodeService, OtpCodeService>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddScoped<ITaskService, TaskService>();
+        services.AddScoped<IProjectService, ProjectService>();
+        services.AddScoped<IUserService, UserService>();
         services.AddSingleton<JwtConfig>();
         services.AddSingleton<QueueConfiguration>();
     }
