@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ProjectManagement.Data.Interfaces;
 using ProjectManagement.Models.Configuration;
+using ProjectManagement.Models.Domains.Security.Enums;
 using ProjectManagement.Models.Domains.User.Enums;
 using ProjectManagement.Models.Entities.Domains.Auth;
-using ProjectManagement.Models.Enums;
 using ProjectManagement.Models.Identity;
 using ProjectManagement.Services.Domains.Auth.Dtos;
 using ProjectManagement.Services.Domains.Notification;
@@ -126,15 +126,13 @@ public class AuthenticationService : IAuthenticationService
             };
         }
 
-        CreateOtpNotificationDto otpNotification = new(user.Id, user.Email!, user.Name, OtpOperation.EmailConfirmation);
+        CreateOtpNotificationDto otpNotification = new(user.Id, user.Email!, user.Name, NotificationType.EmailConfirmation);
         await _notificationManagerService.CreateOtpNotificationAsync(otpNotification, cancellationToken);
-
-        SignedInDto result = await CreateAccessTokenAsync(user);
 
         return new ServiceResponse<SignedInDto>
         {
             StatusCode = HttpStatusCode.OK,
-            Data = result
+            Message = $"Hello {user.UserName} we happy to have you on board. Please check your email: {user.Email} to confirm your email, then come back and sign in to your account."
         };
     }
 
@@ -173,8 +171,10 @@ public class AuthenticationService : IAuthenticationService
 
             if (!user.EmailConfirmed)
             {
-                CreateOtpNotificationDto otpNotification = new(user.Id, user.Email!, user.Name, OtpOperation.EmailConfirmation);
+                CreateOtpNotificationDto otpNotification = new(user.Id, user.Email!, user.Name, NotificationType.EmailConfirmation);
                 await _notificationManagerService.CreateOtpNotificationAsync(otpNotification, cancellationToken);
+                throw new AuthenticationException($"Hello {user.UserName} we happy to have you on board. Please check your email: {user.Email} to confirm your email before signing in again.");
+
             }
 
             return new ServiceResponse<SignedInDto>
@@ -201,7 +201,7 @@ public class AuthenticationService : IAuthenticationService
             var principal = GetPrincipalFromExpiredToken(accessToken);
             if (principal.Identity is null)
             {
-                throw new AuthenticationException("Access has expired");
+                throw new AuthenticationException("Access token has expired");
 
             }
 
@@ -209,7 +209,7 @@ public class AuthenticationService : IAuthenticationService
             var user = await _userManager.FindByEmailAsync(email);
             if (user is null)
             {
-                throw new AuthenticationException("Access has expired");
+                throw new AuthenticationException("Access token has expired");
 
             }
 
@@ -221,7 +221,7 @@ public class AuthenticationService : IAuthenticationService
 
             if (isRefreshTokenIvalid)
             {
-                throw new AuthenticationException("Access has expired");
+                throw new AuthenticationException("Access token has expired");
             }
 
             var result = await CreateAccessTokenAsync(user);
@@ -254,7 +254,7 @@ public class AuthenticationService : IAuthenticationService
             };
         }
 
-        CreateOtpNotificationDto otpNotification = new(user.Id, user.Email!, user.Name, OtpOperation.EmailConfirmation);
+        CreateOtpNotificationDto otpNotification = new(user.Id, user.Email!, user.Name, NotificationType.EmailConfirmation);
         await _notificationManagerService.CreateOtpNotificationAsync(otpNotification, cancellationToken);
 
         return new ServiceResponse
@@ -275,12 +275,13 @@ public class AuthenticationService : IAuthenticationService
             };
         }
 
-        CreateOtpNotificationDto otpNotification = new(user.Id, user.Email!, user.Name, OtpOperation.PasswordReset);
+        CreateOtpNotificationDto otpNotification = new(user.Id, user.Email!, user.Name, NotificationType.PasswordReset);
         await _notificationManagerService.CreateOtpNotificationAsync(otpNotification, cancellationToken);
 
         return new ServiceResponse
         {
             StatusCode = HttpStatusCode.OK,
+            Message = $"{user.UserName} we have sent an otp to recet your password.",
         };
     }
 
@@ -308,7 +309,7 @@ public class AuthenticationService : IAuthenticationService
             };
         }
 
-        bool isOtpValid = await _otpCodeService.VerifyOtpAsync(user.Id, model.Otp, OtpOperation.EmailConfirmation);
+        bool isOtpValid = await _otpCodeService.VerifyOtpAsync(user.Id, model.Otp, NotificationType.EmailConfirmation);
 
         if (!isOtpValid)
         {
@@ -372,7 +373,7 @@ public class AuthenticationService : IAuthenticationService
             };
         }
 
-        bool isOtpValid = await _otpCodeService.VerifyOtpAsync(user.Id, model.Otp, OtpOperation.PasswordReset);
+        bool isOtpValid = await _otpCodeService.VerifyOtpAsync(user.Id, model.Otp, NotificationType.PasswordReset);
 
         if (!isOtpValid)
         {
@@ -432,6 +433,8 @@ public class AuthenticationService : IAuthenticationService
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email!),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email!),
                 new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName!),
+                new Claim(JwtRegisteredClaimNames.Iss, _appSetting.Jwt.JwtIssuer!),
+                new Claim(JwtRegisteredClaimNames.Aud, _appSetting.Jwt.JwtAudience!),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString())
             };

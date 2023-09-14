@@ -20,33 +20,37 @@ public class SqsNotificationEventHandler : ISqsNotificationEventHandler
     public async Task PollMessagesForEmailSendingAsync(CancellationToken cancellationToken)
     {
         ICommandClient commandSender = _commandSenderFactory();
-        await commandSender.PollQueueAsync<SendEmailNotification>(_appSetting.QueueConfiguration.EmailQueueUrl, async (message, stoppingToken) =>
+        await commandSender.PollQueueAsync<SendEmailNotification>(_appSetting.QueueConfiguration.EmailQueueUrl,
+        async (message, stoppingToken) =>
         {
-            await _notificationReceivedService.HandleEmailSendingEvent(message, stoppingToken);
+            await _notificationReceivedService.HandleEmailSendingEvent(message!, stoppingToken);
         }, cancellationToken);
     }
     public async Task PollMessagesForEmailBroadcastAsync(CancellationToken cancellationToken)
     {
         ICommandClient commandSender = _commandSenderFactory();
-        await commandSender.PollQueueAsync<SendBroadcastEmailNotification>(_appSetting.QueueConfiguration.EmailQueueUrl, async (message, stoppingToken) =>
+        await commandSender.PollQueueAsync<SendBroadcastEmailNotification>(_appSetting.QueueConfiguration.EmailQueueUrl,
+        async (message, stoppingToken) =>
         {
-            await _notificationReceivedService.HandleEmailBroadcastEvent(message, stoppingToken);
+            await _notificationReceivedService.HandleEmailBroadcastEvent(message!, stoppingToken);
         }, cancellationToken);
     }
     public async Task PollMessagesForSmsSendingAsync(CancellationToken cancellationToken)
     {
         ICommandClient commandSender = _commandSenderFactory();
-        await commandSender.PollQueueAsync<SendSmsNotification>(_appSetting.QueueConfiguration.EmailQueueUrl, async (message, stoppingToken) =>
+        await commandSender.PollQueueAsync<SendSmsNotification>(_appSetting.QueueConfiguration.EmailQueueUrl,
+        async (message, stoppingToken) =>
         {
-            await _notificationReceivedService.HandleSmsSendingEvent(message, stoppingToken);
+            await _notificationReceivedService.HandleSmsSendingEvent(message!, stoppingToken);
         }, cancellationToken);
     }
     public async Task PollMessagesForSmsBroadcastAsync(CancellationToken cancellationToken)
     {
         ICommandClient commandSender = _commandSenderFactory();
-        await commandSender.PollQueueAsync<SendBroadcastSmsNotification>(_appSetting.QueueConfiguration.EmailQueueUrl, async (message, stoppingToken) =>
+        await commandSender.PollQueueAsync<SendBroadcastSmsNotification>(_appSetting.QueueConfiguration.EmailQueueUrl,
+        async (message, stoppingToken) =>
         {
-            await _notificationReceivedService.HandleSmsBroadcastEvent(message, stoppingToken);
+            await _notificationReceivedService.HandleSmsBroadcastEvent(message!, stoppingToken);
         }, cancellationToken);
     }
 }

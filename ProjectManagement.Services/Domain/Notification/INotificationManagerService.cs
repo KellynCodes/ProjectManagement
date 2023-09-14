@@ -1,7 +1,8 @@
-﻿using ProjectManagement.Models.Entities.Domains.Notification;
+﻿using ProjectManagement.Models.Entities.Domains.Project;
 using ProjectManagement.Models.Enums;
+using ProjectManagement.Models.Identity;
+using ProjectManagement.Services.Domain.User.Dto;
 using ProjectManagement.Services.Domains.Notification.Dtos;
-using ProjectManagement.Services.Utility;
 
 namespace ProjectManagement.Services.Domains.Notification;
 /// <summary>
@@ -22,5 +23,23 @@ public interface INotificationManagerService
     /// </summary>
     /// <param name="notificationStatus">Enum to choose between unread and read. <see cref="NotificationStatus"/> </param>
     /// <returns></returns>
-    Task<ServiceResponse<NotificationDto>> MarkNotificationAsReadOrUnreadAsync(NotificationStatus notificationStatus);
+    Task NotifyUserForAssignedTaskAsync(ApplicationUser user, ProjTask task, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="task"></param>
+    /// <param name="status"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task NotifyUserForCompletedTaskAsync(ApplicationUser user, ProjTask task, Status status, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Notify user when task is within 48hrs to be due.
+    /// </summary>
+    /// <param name="userAndTask"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task NotifyUserWhenTaskDueDateIsWithin48HrsAsync(UserResponseDto userAndTask, CancellationToken cancellationToken);
 }

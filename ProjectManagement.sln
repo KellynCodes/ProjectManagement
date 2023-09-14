@@ -3,23 +3,30 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectManagement.API", "ProjectManagement.API\ProjectManagement.API.csproj", "{36DB1D9A-BD13-41A5-A8B2-62879E3630DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectManagement.API", "ProjectManagement.API\ProjectManagement.API.csproj", "{36DB1D9A-BD13-41A5-A8B2-62879E3630DA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Worker", "Worker", "{1B7E385F-3AB8-4373-8506-CB3113AD8661}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectManagement.Worker", "ProjectManagement.Worker\ProjectManagement.Worker.csproj", "{CED9237E-C1A1-4A76-AE50-84FF1D65AA0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectManagement.Worker", "ProjectManagement.Worker\ProjectManagement.Worker.csproj", "{CED9237E-C1A1-4A76-AE50-84FF1D65AA0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectManagement.Services", "ProjectManagement.Services\ProjectManagement.Services.csproj", "{15EF7D35-1B0F-4B46-A55E-D916558CC9C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectManagement.Services", "ProjectManagement.Services\ProjectManagement.Services.csproj", "{15EF7D35-1B0F-4B46-A55E-D916558CC9C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectManagement.Data", "ProjectManagement.Data\ProjectManagement.Data.csproj", "{B0832D1B-0B8D-4ABF-9329-EC5CD59B797B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectManagement.Data", "ProjectManagement.Data\ProjectManagement.Data.csproj", "{B0832D1B-0B8D-4ABF-9329-EC5CD59B797B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectManagement.AsyncClient", "ProjectManagement.AsyncClient\ProjectManagement.AsyncClient.csproj", "{DF5165BB-F096-4DEC-9405-00C1EE10ACE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectManagement.AsyncClient", "ProjectManagement.AsyncClient\ProjectManagement.AsyncClient.csproj", "{DF5165BB-F096-4DEC-9405-00C1EE10ACE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectManagement.Models", "ProjectManagement.Models\ProjectManagement.Models.csproj", "{35610663-8F54-44F2-88CF-C20DB6E5CB93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectManagement.Models", "ProjectManagement.Models\ProjectManagement.Models.csproj", "{35610663-8F54-44F2-88CF-C20DB6E5CB93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectManagement.Cache", "ProjectManagement.Cache\ProjectManagement.Cache.csproj", "{98D0B77B-2B12-4C16-878B-044BAA296879}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectManagement.Cache", "ProjectManagement.Cache\ProjectManagement.Cache.csproj", "{98D0B77B-2B12-4C16-878B-044BAA296879}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{F52E0674-0677-4657-8832-854EFA7AC082}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{2C39A7B5-A54D-40D3-BD2A-33F9F5364DB2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflow", "Workflow", "{0F40A610-3E98-49ED-B5B3-74DD38091F7E}"
+	ProjectSection(SolutionItems) = preProject
+		git-docker-aws.yaml = git-docker-aws.yaml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,6 +72,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CED9237E-C1A1-4A76-AE50-84FF1D65AA0F} = {1B7E385F-3AB8-4373-8506-CB3113AD8661}
+		{0F40A610-3E98-49ED-B5B3-74DD38091F7E} = {2C39A7B5-A54D-40D3-BD2A-33F9F5364DB2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2622EEED-A9F7-436A-AB27-C86891AE84F5}

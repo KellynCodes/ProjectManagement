@@ -10,5 +10,7 @@ public class ApplicationUser : IdentityUser
     public bool DeActivated { get; set; }
     public UserRole UserRole { get; set; }
     public bool IsDeleted { get; set; }
+    public Guid TaskId { get; set; }
+    public virtual ICollection<ProjTask> Tasks { get; set; }
     public virtual ICollection<Project> Projects { get; set; } = null!;
 }

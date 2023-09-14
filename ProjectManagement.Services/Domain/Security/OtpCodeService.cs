@@ -1,6 +1,6 @@
 ﻿using ProjectManagement.Cache.Interfaces;
 using ProjectManagement.Models.Domains.Security.Dtos;
-using ProjectManagement.Models.Enums;
+using ProjectManagement.Models.Domains.Security.Enums;
 
 namespace ProjectManagement.Services.Domains.Security;
 public class OtpCodeService : IOtpCodeService
@@ -13,7 +13,7 @@ public class OtpCodeService : IOtpCodeService
         _cacheService = cacheService;
     }
 
-    public async Task<string> GenerateOtpAsync(string userId, OtpOperation operation)
+    public async Task<string> GenerateOtpAsync(string userId, NotificationType operation)
     {
         string cacheKey = CacheKeySelector.OtpCodeCacheKey(userId, operation);
         OtpCodeDto? otpCode = await _cacheService.ReadFromCache<OtpCodeDto>(cacheKey);
@@ -29,7 +29,7 @@ public class OtpCodeService : IOtpCodeService
         return otpCode.Otp;
     }
 
-    public async Task<bool> VerifyOtpAsync(string userId, string otp, OtpOperation operation)
+    public async Task<bool> VerifyOtpAsync(string userId, string otp, NotificationType operation)
     {
         string cacheKey = CacheKeySelector.OtpCodeCacheKey(userId, operation);
         OtpCodeDto? otpCode = await _cacheService.ReadFromCache<OtpCodeDto>(cacheKey);

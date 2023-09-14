@@ -28,20 +28,20 @@ namespace ProjectManagement.Services.Domain.User
             _logger = logger;
             _userRepo = _unitOfWork.GetRepository<ApplicationUser>();
         }
-        public async Task<ServiceResponse<UserDto>> GetUserAsync(string userId)
+        public async Task<ServiceResponse<UserModelDto>> GetUserAsync(string userId)
         {
             ApplicationUser? user = await _userManager.FindByIdAsync(userId);
             if (user is null)
             {
-                return new ServiceResponse<UserDto>
+                return new ServiceResponse<UserModelDto>
                 {
                     Message = "User not found.",
                     StatusCode = HttpStatusCode.NotFound,
                 };
             }
 
-            UserDto result = _mapper.Map<UserDto>(user);
-            return new ServiceResponse<UserDto>
+            UserModelDto result = _mapper.Map<UserModelDto>(user);
+            return new ServiceResponse<UserModelDto>
             {
                 Data = result,
                 StatusCode = HttpStatusCode.OK,
@@ -89,12 +89,12 @@ namespace ProjectManagement.Services.Domain.User
             }
         }
 
-        public async Task<ServiceResponse<UserDto>> DeleteAccountAsync(string userId)
+        public async Task<ServiceResponse<UserModelDto>> DeleteAccountAsync(string userId)
         {
             ApplicationUser? user = await _userManager.FindByIdAsync(userId);
             if (user is null)
             {
-                return new ServiceResponse<UserDto>
+                return new ServiceResponse<UserModelDto>
                 {
                     Message = "User not found.",
                     StatusCode = HttpStatusCode.NotFound,
@@ -103,19 +103,19 @@ namespace ProjectManagement.Services.Domain.User
 
             user.IsDeleted = true;
             await _userRepo.UpdateAsync(user);
-            return new ServiceResponse<UserDto>
+            return new ServiceResponse<UserModelDto>
             {
                 StatusCode = HttpStatusCode.OK,
                 Message = $"{user.Name} was soft deleted.",
             };
         }
 
-        public async Task<ServiceResponse<UserDto>> UpdateUserAsync(string userId, UserDto model)
+        public async Task<ServiceResponse<UserModelDto>> UpdateUserAsync(string userId, UserModelDto model)
         {
             ApplicationUser? user = await _userManager.FindByIdAsync(userId);
             if (user is null)
             {
-                return new ServiceResponse<UserDto>
+                return new ServiceResponse<UserModelDto>
                 {
                     Message = "User not found.",
                     StatusCode = HttpStatusCode.NotFound,
@@ -123,8 +123,8 @@ namespace ProjectManagement.Services.Domain.User
             }
             _mapper.Map(model, user);
             ApplicationUser response = await _userRepo.UpdateAsync(user);
-            UserDto result = new(response.Name, response.UserName!);
-            return new ServiceResponse<UserDto>
+            UserModelDto result = new(response.Name, response.UserName!);
+            return new ServiceResponse<UserModelDto>
             {
                 StatusCode = HttpStatusCode.OK,
                 Message = $"{user.Name} your account was updated successfully.",
@@ -132,25 +132,25 @@ namespace ProjectManagement.Services.Domain.User
             };
         }
 
-        public async Task<ServiceResponse<UserDto>> UpdateUserAsync(string userId, JsonPatchDocument<UserDto> model)
+        public async Task<ServiceResponse<UserModelDto>> UpdateUserAsync(string userId, JsonPatchDocument<UserModelDto> model)
         {
             ApplicationUser? user = await _userManager.FindByIdAsync(userId);
             if (user is null)
             {
-                return new ServiceResponse<UserDto>
+                return new ServiceResponse<UserModelDto>
                 {
                     Message = "User not found.",
                     StatusCode = HttpStatusCode.NotFound,
                 };
             }
 
-            var userToPatch = new UserDto(user.Name, user.UserName!);
+            var userToPatch = new UserModelDto(user.Name, user.UserName!);
             model.ApplyTo(userToPatch);
             user.Name = userToPatch.Name;
             user.UserName = userToPatch.UserName;
             ApplicationUser response = await _userRepo.UpdateAsync(user);
-            UserDto result = new(response.Name, response.UserName!);
-            return new ServiceResponse<UserDto>
+            UserModelDto result = new(response.Name, response.UserName!);
+            return new ServiceResponse<UserModelDto>
             {
                 StatusCode = HttpStatusCode.OK,
                 Message = $"{user.Name} your account was updated successfully.",

@@ -1,4 +1,4 @@
-﻿using ProjectManagement.Models.Enums;
+﻿using ProjectManagement.Models.Domains.Security.Enums;
 
 namespace ProjectManagement.Services.Domains.Notification.Dtos;
 /// <summary>
@@ -9,4 +9,4 @@ namespace ProjectManagement.Services.Domains.Notification.Dtos;
 /// <param name="fullName">Fullname of the recipient of the otp email</param>
 /// <param name="ProjectId">Hostel whose subdomain from which the user is attempting to reset their password</param>
 /// <param name="operation">The operation for which we are attempting to generate an otp code</param>
-public record CreateOtpNotificationDto(string userId, string email, string fullName, OtpOperation operation);
+public record CreateOtpNotificationDto(string userId, string email, string fullName, NotificationType operation);

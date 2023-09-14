@@ -7,7 +7,7 @@ namespace ProjectManagement.Models.Entities.Domains.Project
     {
         public string Title { get; set; }
         public string Description { get; set; }
-        public DateTimeOffset DueDate { get; set; }
+        public DateTimeOffset DueDate { get; set; } = DateTimeOffset.UtcNow.AddHours(48);
         public Status Status { get; set; }
         public Priority Priority { get; set; }
         public Guid? ProjectId { get; set; }

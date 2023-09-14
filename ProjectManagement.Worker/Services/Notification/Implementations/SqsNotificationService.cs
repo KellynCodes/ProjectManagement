@@ -23,7 +23,7 @@ public class SqsNotificationService : ISqsNotificationService
     public async Task HandleEmailSendingEvent(SendEmailNotification command, CancellationToken cancellationToken)
     {
         EmailTemplateModel content = await _emailProcessor.ProcessEmailNotificationRequestAsync(command);
-        HttpStatusCode statusCode = await _emailProcessor.SendMailAsync(content, "Jedra.com");
+        HttpStatusCode statusCode = await _emailProcessor.SendMailByMailKitAsync(content);
         if (statusCode == HttpStatusCode.OK)
         {
             _logger.LogInformation($"Mail has been sent to {content.Email} on {DateTime.UtcNow.ToLongDateString()}.");

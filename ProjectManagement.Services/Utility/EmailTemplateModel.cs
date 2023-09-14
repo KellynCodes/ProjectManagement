@@ -8,5 +8,5 @@ public class EmailTemplateModel
     public string DeliveryDate { get; set; } = string.Empty;
     public List<string> CCs { get; set; }
     public List<string> BCCs { get; set; }
-    public Dictionary<string, string> Replacements { get; set; } = new Dictionary<string, string>();
+    public string Source { get; set; }
 }

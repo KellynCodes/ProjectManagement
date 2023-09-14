@@ -114,11 +114,8 @@ public class AuthController : BaseController
     [ProducesResponseType(200, Type = typeof(ApiResponse))]
     [ProducesResponseType(404, Type = typeof(ApiResponse))]
     [ProducesResponseType(400, Type = typeof(ApiResponse))]
-    public async Task<IActionResult> Refresh()
+    public async Task<IActionResult> Refresh([FromQuery] string accessToken, [FromQuery] string refreshToken)
     {
-        string refreshToken = string.Empty;
-        string accessToken = string.Empty;
-
         ServiceResponse<SignedInDto> tokenResponse = await _authService.RefreshAccessTokenAsync(accessToken, refreshToken);
         return ComputeResponse(tokenResponse);
     }

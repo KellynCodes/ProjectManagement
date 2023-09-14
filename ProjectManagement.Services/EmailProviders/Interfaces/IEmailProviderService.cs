@@ -5,8 +5,8 @@ using System.Net;
 namespace ProjectManagement.Services.EmailProviders.Interfaces;
 public interface IEmailProviderService
 {
-    Task<HttpStatusCode> SendMailAsync(EmailTemplateModel emailTemplate);
-    Task<HttpStatusCode> SendMailAsync(EmailTemplateModel model, string cpName);
+    Task<HttpStatusCode> SendMailByAwsSesAsync(EmailTemplateModel emailTemplate);
+    Task<HttpStatusCode> SendMailByMailKitAsync(EmailTemplateModel model);
     Task<EmailTemplateModel> ProcessEmailNotificationRequestAsync(SendEmailNotification emailContent);
     Task<EmailTemplateModel> ProcessEmailNotificationRequestAsync(SendBroadcastEmailNotification emailContent);
 }

@@ -47,7 +47,7 @@ public class UserController : BaseController
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPut("{userId}")]
-    public async Task<IActionResult> UpdateAccount([FromRoute] string userId, [FromBody] UserDto model)
+    public async Task<IActionResult> UpdateAccount([FromRoute] string userId, [FromBody] UserModelDto model)
     {
         var response = await _userService.UpdateUserAsync(userId, model);
         return ComputeResponse(response);
@@ -59,7 +59,7 @@ public class UserController : BaseController
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPatch("{userId}")]
-    public async Task<IActionResult> UpdateAccount([FromRoute] string userId, [FromBody] JsonPatchDocument<UserDto> model)
+    public async Task<IActionResult> UpdateAccount([FromRoute] string userId, [FromBody] JsonPatchDocument<UserModelDto> model)
     {
         var response = await _userService.UpdateUserAsync(userId, model);
         return ComputeResponse(response);

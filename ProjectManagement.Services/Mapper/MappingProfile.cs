@@ -13,8 +13,8 @@ namespace ProjectManagement.Services.Mapper
         public MappingProfile()
         {
             //User mapping
-            CreateMap<UserDto, ApplicationUser>();
-            CreateMap<ApplicationUser, UserDto>();
+            CreateMap<UserModelDto, ApplicationUser>();
+            CreateMap<ApplicationUser, UserModelDto>();
 
             //Task mapping
             CreateMap<TaskDto, ProjTask>();

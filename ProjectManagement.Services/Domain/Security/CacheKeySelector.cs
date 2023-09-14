@@ -1,9 +1,10 @@
-﻿using ProjectManagement.Models.Enums;
+﻿using ProjectManagement.Models.Domains.Security.Enums;
+using ProjectManagement.Models.Enums;
 
 namespace ProjectManagement.Services.Domains.Security;
 public class CacheKeySelector
 {
-    public static string OtpCodeCacheKey(string userId, OtpOperation operation)
+    public static string OtpCodeCacheKey(string userId, NotificationType operation)
     {
         return SHA256Hasher.Hash($"{CacheKeyPrefix.OtpCode}_{userId}_{operation}");
     }

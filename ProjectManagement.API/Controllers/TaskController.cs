@@ -4,6 +4,7 @@ using ProjectManagement.Models.Enums;
 using ProjectManagement.Models.Utility;
 using ProjectManagement.Services.Domain.Task;
 using ProjectManagement.Services.Domain.Task.Dto;
+using ProjectManagement.Services.Domain.User.Dto;
 using ProjectManagement.Services.Utility;
 
 namespace ProjectManagement.API.Controllers;
@@ -41,12 +42,22 @@ public class TaskController : BaseController
     /// <param name="taskId"></param>
     /// <param name="taskAction"></param>
     /// <returns></returns>
-    [HttpPut("assign/{projectId}/{taskId}/{taskAction}")]
+    [HttpPut("{projectId}/assign/{taskId}/{taskAction}")]
     [ProducesResponseType(200, Type = typeof(ApiResponse<TaskDto>))]
     [ProducesResponseType(400, Type = typeof(ApiResponse))]
     public async Task<IActionResult> AssignOrRemoveTaskFromAProject([FromRoute] Guid projectId, [FromRoute] Guid taskId, [FromRoute] TaskAction taskAction)
     {
         ServiceResponse<TaskDto> response = await _taskService.AssignOrRemoveTaskFromAProjectAsync(projectId, taskId, taskAction);
+        return ComputeResponse(response);
+    }
+
+
+    [HttpPut("assign/{projectId}/{taskId}/{userId}")]
+    [ProducesResponseType(200, Type = typeof(ApiResponse<TaskDto>))]
+    [ProducesResponseType(400, Type = typeof(ApiResponse))]
+    public async Task<IActionResult> AssignTaskToUser(Guid projectId, Guid taskId, string userId)
+    {
+        ServiceResponse<TaskDto> response = await _taskService.AssignTaskToUserAsync(projectId, taskId, userId, CancellationToken.None);
         return ComputeResponse(response);
     }
 
@@ -80,6 +91,24 @@ public class TaskController : BaseController
     public async Task<IActionResult> UpdateProject([FromRoute] Guid projectId, [FromRoute] Guid taskId, [FromBody] TaskDto model)
     {
         ServiceResponse<TaskDto> response = await _taskService.UpdateTaskAsync(projectId, taskId, model);
+        return ComputeResponse(response);
+    }
+
+    [HttpPut("status/{taskId}/{userId}/{status}")]
+    [ProducesResponseType(200, Type = typeof(ApiResponse<TaskDto>))]
+    [ProducesResponseType(400, Type = typeof(ApiResponse))]
+    public async Task<IActionResult> ChangeTaskStatus([FromRoute] Guid taskId, [FromRoute] string userId, [FromRoute] Status status)
+    {
+        ServiceResponse<TaskDto> response = await _taskService.ChangeTaskStatusAsync(taskId, userId, status, CancellationToken.None);
+        return ComputeResponse(response);
+    }
+
+    [HttpGet("due-date-reminder")]
+    [ProducesResponseType(200, Type = typeof(ApiResponse<UserResponseDto>))]
+    [ProducesResponseType(400, Type = typeof(ApiResponse))]
+    public async Task<IActionResult> ChangeTaskStatus()
+    {
+        ServiceResponse<IEnumerable<UserResponseDto>> response = await _taskService.NotifyUserWhenTaskDueDateIsWithin48HrsAsync(CancellationToken.None);
         return ComputeResponse(response);
     }
 }

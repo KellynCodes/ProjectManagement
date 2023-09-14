@@ -1,4 +1,4 @@
-﻿using ProjectManagement.Models.Enums;
+﻿using ProjectManagement.Models.Domains.Security.Enums;
 
 namespace ProjectManagement.Services.Domains.Security;
 
@@ -14,7 +14,7 @@ public interface IOtpCodeService
     /// <param name="otp">The otp code entered by the user</param>
     /// <param name="operation">The operation for which we are attempting to validate via 2FA</param>
     /// <returns></returns>
-    Task<string> GenerateOtpAsync(string userId, OtpOperation operation);
+    Task<string> GenerateOtpAsync(string userId, NotificationType operation);
 
     /// <summary>
     /// Verifies the validity of the generated OTP code
@@ -23,5 +23,5 @@ public interface IOtpCodeService
     /// <param name="otp">The otp code entered by the user</param>
     /// <param name="operation">The operation for which we are attempting to validate via 2FA</param>
     /// <returns></returns>
-    Task<bool> VerifyOtpAsync(string userId, string otp, OtpOperation operation);
+    Task<bool> VerifyOtpAsync(string userId, string otp, NotificationType operation);
 }

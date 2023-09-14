@@ -45,6 +45,7 @@ public class EmailProviderService : IEmailProviderService
 
         EmailTemplateModel emailTemplate = new EmailTemplateModel
         {
+            Source = emailContent.Source,
             DeliveryDate = emailContent.CommandSentAt.ToLongDateString(),
             Email = emailContent.To.Email,
             Subject = emailContent.Subject,
@@ -61,7 +62,7 @@ public class EmailProviderService : IEmailProviderService
         throw new NotImplementedException();
     }
 
-    public async Task<HttpStatusCode> SendMailAsync(EmailTemplateModel emailTemplate)
+    public async Task<HttpStatusCode> SendMailByAwsSesAsync(EmailTemplateModel emailTemplate)
     {
         var sendRequest = new SendEmailRequest
         {
@@ -86,19 +87,19 @@ public class EmailProviderService : IEmailProviderService
         return response.HttpStatusCode;
     }
 
-    public async Task<HttpStatusCode> SendMailAsync(EmailTemplateModel model, string cpName)
+    public async Task<HttpStatusCode> SendMailByMailKitAsync(EmailTemplateModel model)
     {
         if (model == null) throw new InvalidOperationException("Object values cannot be empty.");
         MimeMessage email = new();
-        email.From.Add(new MailboxAddress(name: cpName, address: _appSetting.Aws.Ses.EmailFrom));
+        email.From.Add(new MailboxAddress(name: model.Source, address: _appSetting.MailKit.EmailFrom));
         email.To.Add(MailboxAddress.Parse(model.Email));
         email.Subject = model.Subject;
         email.Body = new TextPart(TextFormat.Html) { Text = model.EmailBodyHtml };
-        if (int.TryParse(_appSetting.Aws.Ses.SmtpPort, out var smtpPort))
+        using SmtpClient smtpClient = new();
+        if (int.TryParse(_appSetting.MailKit.SmtpPort, out int smtpPort))
         {
-            using SmtpClient smtpClient = new();
-            await smtpClient.ConnectAsync(_appSetting.Aws.Ses.SmtpHost, smtpPort, useSsl: true);
-            await smtpClient.AuthenticateAsync(userName: _appSetting.Aws.Ses.EmailFrom, password: _appSetting.Aws.Ses.SmtpPass);
+            await smtpClient.ConnectAsync(_appSetting.MailKit.SmtpHost, smtpPort, useSsl: true);
+            await smtpClient.AuthenticateAsync(userName: _appSetting.MailKit.EmailFrom, password: _appSetting.MailKit.SmtpPass);
             await smtpClient.SendAsync(email);
             await smtpClient.DisconnectAsync(true);
             smtpClient.Dispose();

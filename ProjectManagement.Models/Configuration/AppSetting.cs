@@ -9,6 +9,7 @@ public class AppSetting
     public RedisConfig Redis { get; set; } = null!;
     public JwtConfig Jwt { get; set; } = null!;
     public AwsConfig Aws { get; set; } = null!;
+    public MailKit MailKit { get; set; } = null!;
     public QueueConfiguration QueueConfiguration { get; set; } = null!;
 }
 

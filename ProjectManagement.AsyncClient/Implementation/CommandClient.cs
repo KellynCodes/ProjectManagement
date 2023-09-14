@@ -19,7 +19,7 @@ public class CommandClient : ICommandClient
         _sqsClient = sqsClient;
     }
 
-    public async Task PollQueueAsync<TMessage>(string queueUrl, Func<TMessage?, CancellationToken, Task> delegateFunc,CancellationToken cancellationToken, int numberOfMessages, int timeOutInSeconds)
+    public async Task PollQueueAsync<TMessage>(string queueUrl, Func<TMessage?, CancellationToken, Task> delegateFunc, CancellationToken cancellationToken, int numberOfMessages, int timeOutInSeconds)
     {
         try
         {
@@ -92,7 +92,7 @@ public class CommandClient : ICommandClient
         try
         {
             string messageBody = JsonConvert.SerializeObject(payload, _stringEnumConverter);
-            //We are using STANDARD queus so no need to pass a message group id
+            //We are using STANDARD queues so no need to pass a message group id
             SendMessageRequest message = new SendMessageRequest
             {
                 MessageBody = messageBody,
