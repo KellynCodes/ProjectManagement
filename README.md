@@ -60,7 +60,7 @@ Before running the application, provide the following credentials and configurat
 
 ### Running the Application:
 
-1. **Start Services**: Begin by running the background worker service project. Once that's up and running, start the Web API.
+1. **Start Services**: Begin by running the Web api project. Once that's up and running, start the background worker service project.
    
 2. **Account Creation**: 
    - Upon the first run, you should create an account through the API.
