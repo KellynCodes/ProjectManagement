@@ -1,9 +1,9 @@
-name: Docker Build and Push
+name: Docker build and push to aws ECS
 
 on:
   push:
     branches:
-      - master
+      - dev
 env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: jadra.api
