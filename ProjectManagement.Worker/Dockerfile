@@ -8,10 +8,10 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["ProjectManagement.Worker.csproj", "ProjectManagement.Worker/"]
-RUN dotnet restore "ProjectManagement.Worker.csproj"
+COPY ["ProjectManagement.Worker/ProjectManagement.Worker.csproj", "ProjectManagement.Worker/"]
+RUN dotnet restore "ProjectManagement.Worker/ProjectManagement.Worker.csproj"
 COPY . .
-WORKDIR "/src/"
+WORKDIR "ProjectManagement.Worker"
 RUN dotnet build "ProjectManagement.Worker.csproj" -c Release -o /app/build
 
 FROM build AS publish

@@ -35,16 +35,13 @@ jobs:
     - name: Build and Push Docker Image to worker repository
       run: |
         cd ProjectManagement.Worker
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/jadra.worker:latest .
+        docker build ProjectManagement.Worker/Docker  -t ${{ secrets.DOCKER_USERNAME }}/jadra.worker:latest ./src
         docker push ${{ secrets.DOCKER_USERNAME }}/jadra.worker:latest
-        cd ..
 
     - name: Build and Push Docker Image to api repository
       run: |
-        cd ProjectManagement.API
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/jadra.api:latest .
+        docker build ProjectManagement.API -t ${{ secrets.DOCKER_USERNAME }}/jadra.api:latest ./src
         docker push ${{ secrets.DOCKER_USERNAME }}/jadra.api:latest   
-        cd ..
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -64,11 +61,9 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        cd ProjectManagement.API
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${{env.IMAGE_WEBAPP}}-$IMAGE_TAG .
+        docker build -f ProjectManagement.API/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:${{env.IMAGE_WEBAPP}}-$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{env.IMAGE_WEBAPP}}-$IMAGE_TAG
         echo "image_webapp=$ECR_REGISTRY/$ECR_REPOSITORY:${{env.IMAGE_WEBAPP}}-$IMAGE_TAG" >> $GITHUB_ENV
-        cd ..
 
     # Worker
     - name: Build, tag, and push image to Amazon ECR for Worker
@@ -77,11 +72,9 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        cd ProjectManagement.Worker
-        docker build -f Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:${{env.IMAGE_WORKER}}-$IMAGE_TAG .
+        docker build -f ProjectManagement.Worker/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:${{env.IMAGE_WORKER}}-$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{env.IMAGE_WORKER}}-$IMAGE_TAG
         echo "image_worker=$ECR_REGISTRY/$ECR_REPOSITORY:${{env.IMAGE_WORKER}}-$IMAGE_TAG" >> $GITHUB_ENV
-        cd ..
 
     # Update Task Definition
     - name: Fill in the new image IDs in the Amazon ECS task definition
