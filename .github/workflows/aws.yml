@@ -12,7 +12,6 @@ env:
   ECS_TASK_DEFINITION: jadra-api-task-def
   IMAGE_WEBAPP: jadra.api
   IMAGE_WORKER: jadra.worker 
-  IMAGE_TAG: ${{ github.sha }}
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
 
 jobs:
