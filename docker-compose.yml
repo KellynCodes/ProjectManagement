@@ -5,7 +5,7 @@ services:
     image: "${DOCKER_USERNAME}Jadra.Api:latest"
     build:
       context: .
-      dockerfile: ProjectManagement.API\Dockerfile
+      dockerfile: ProjectManagement.API/Dockerfile
     depends_on:
       - redis
     networks:
