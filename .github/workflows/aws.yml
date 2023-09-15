@@ -12,7 +12,7 @@ env:
   ECS_TASK_DEFINITION: jadra-api-task-def
   IMAGE_WEBAPP: jadra.api
   IMAGE_WORKER: jadra.worker 
-  DOCKER_USERNAME: ${{ secret.DOCKER_USERNAME }}
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
 
 jobs:
   build_and_push:
