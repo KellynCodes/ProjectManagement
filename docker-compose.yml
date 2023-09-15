@@ -1,18 +1,18 @@
 version: '3.4'
 
 services:
-  docker_api:
-    image: ${{ secret.DOCKER_USERNAME- }}Jadra.Api:latest
+  docker.api:
+    image: "${DOCKER_USERNAME}Jadra.Api:latest"
     build:
       context: .
-      dockerfile: ProjectManagement.API/Dockerfile
+      dockerfile: ProjectManagement.API\Dockerfile
     depends_on:
       - redis
     networks:
       - normandy
 
-  projectmanagement_worker:
-    image: ${{ secret.DOCKER_USERNAME- }}Jadra.Worker:latest
+  projectmanagement.worker:
+    image: "${DOCKER_USERNAME}Jadra.Worker:latest"
     build:
       context: .
       dockerfile: ProjectManagement.Worker/Dockerfile
@@ -21,8 +21,8 @@ services:
     networks:
       - normandy
       
-  aws_ecr_api:
-    image:  ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_WEBAPP }}-${{ env.IMAGE_TAG }} .
+  aws_ecr.api:
+    image:  $ECR_REGISTRY/$ECR_REPOSITORY:${{env.IMAGE_WEBAPP}}-$IMAGE_TAG .
     build:
       context: .
       dockerfile: ProjectManagement.API/Dockerfile
@@ -31,8 +31,8 @@ services:
     networks:
       - normandy
 
-  aws_ecr_worker:
-    image: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_WORKER }}-${{env.IMAGE_TAG}} .
+  aws_ecr.worker:
+    image: $ECR_REGISTRY/$ECR_REPOSITORY:${{env.IMAGE_WORKER}}-$IMAGE_TAG .
     build:
       context: .
       dockerfile: ProjectManagement.Worker/Dockerfile
