@@ -22,7 +22,7 @@ services:
       - normandy
       
   aws_ecr.api:
-    image:  ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_WEBAPP}-latest .
+    image:  ${ECR_REGISTRY}/${ECR_REPOSITORY}:jadra.api:latest .
     build:
       context: .
       dockerfile: ProjectManagement.API/Dockerfile
