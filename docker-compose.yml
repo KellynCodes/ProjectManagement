@@ -32,7 +32,7 @@ services:
       - normandy
 
   aws_ecr.worker:
-    image: ${ECR_REGISTRY}/jadra.worker:jadra.worker-latest .
+    image: ${ECR_REGISTRY}/jadra.worker:latest .
     build:
       context: .
       dockerfile: ProjectManagement.Worker/Dockerfile
