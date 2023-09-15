@@ -10,8 +10,8 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["ProjectManagement.API/ProjectManagement.API.csproj", "ProjectManagement.API/"]
-RUN dotnet restore "ProjectManagement.API/ProjectManagement.API.csproj"
+COPY ["ProjectManagement.API.csproj", "ProjectManagement.API/"]
+RUN dotnet restore "ProjectManagement.API.csproj"
 COPY . .
 WORKDIR "/ProjectManagement.API"
 RUN dotnet build "ProjectManagement.API.csproj" -c Release -o /app/build
