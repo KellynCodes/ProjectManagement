@@ -14,7 +14,6 @@ env:
   IMAGE_WORKER: jadra.worker 
   IMAGE_TAG: ${{ github.sha }}
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-  ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
 
 jobs:
   build_and_push:
@@ -45,6 +44,9 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v1
       
     - name: Build and Push to DockerHub & AWS ECR
+      env:
+       ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+       IMAGE_TAG: ${{ github.sha }}
       run: |
         docker-compose build
         docker-compose push docker.api
