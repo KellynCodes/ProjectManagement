@@ -6,9 +6,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectManagement.API", "ProjectManagement.API\ProjectManagement.API.csproj", "{36DB1D9A-BD13-41A5-A8B2-62879E3630DA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Worker", "Worker", "{1B7E385F-3AB8-4373-8506-CB3113AD8661}"
-	ProjectSection(SolutionItems) = preProject
-		ProjectManagement.API\README.md = ProjectManagement.API\README.md
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectManagement.Worker", "ProjectManagement.Worker\ProjectManagement.Worker.csproj", "{CED9237E-C1A1-4A76-AE50-84FF1D65AA0F}"
 EndProject

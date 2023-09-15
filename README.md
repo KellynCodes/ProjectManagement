@@ -35,8 +35,6 @@ Users are notified:
 
 ## Setting Up / Installation
 
-Certainly! Here's the enhanced `Usage` section for your `README.md`:
-
 ---
 
 ## Usage
