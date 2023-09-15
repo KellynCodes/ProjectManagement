@@ -36,8 +36,6 @@ jobs:
     - name: Build and Push Docker Image
       run: |
         cd ProjectManagement.Worker
-        echo "${{DOCKER_IMAGE_TAG}}"
-        echo "${{env.IMAGE_WORKER}}"
         docker build -t ${{ secrets.DOCKER_USERNAME }}/${{env.IMAGE_WORKER}}:${{DOCKER_IMAGE_TAG}} .
         docker push ${{ secrets.DOCKER_USERNAME }}/${{env.IMAGE_WORKER}}:${{DOCKER_IMAGE_TAG}}
 
