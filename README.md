@@ -76,9 +76,10 @@ Before running the application, provide the following credentials and configurat
    - From the list of users, copy your user ID.
    - Use this user ID to create a new project. Upon successful project creation, make note of the project ID.
    - With both the project ID and user ID, you're all set to test other CRUD operations on the Project and Task endpoints.
+<!-- 
+- <center><h1>OR</h1></center>
 
-<center><h1>OR</h1></center>
-
-#### You can avoid the complexity of setting up the project and test the live project [here]("https://aws.com/ecs/kellyncodes/jadra.api")
+#### You can avoid the complexity of setting up the project and test the live project <a href="https://aws.com/ecs/kellyncodes/jadra.api">here</a> In few days to come. 
+-->
 ---
 
