@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using ProjectManagement.Models.Configuration;
 using ProjectManagement.Services.Domain.User.Dto;
 using ProjectManagement.Worker.Services.Notification.Interfaces;
 using System.Net;
@@ -10,12 +11,14 @@ namespace ProjectManagement.Worker
         private readonly ILogger<Worker> _logger;
         private readonly ISqsNotificationEventHandler _notificationReceivedEventHandler;
         private readonly HttpClient _client = new HttpClient();
-
+        private readonly AppSetting _appSetting;
         public Worker(ILogger<Worker> logger,
-            ISqsNotificationEventHandler notificationReceivedEventHandler
+            ISqsNotificationEventHandler notificationReceivedEventHandler,
+            AppSetting appSetting
            )
         {
             _logger = logger;
+            _appSetting = appSetting;
             _notificationReceivedEventHandler = notificationReceivedEventHandler;
         }
 
@@ -29,7 +32,7 @@ namespace ProjectManagement.Worker
                 {
                     _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
                     await _notificationReceivedEventHandler.PollMessagesForEmailSendingAsync(stoppingToken);
-                    HttpResponseMessage responseMessage = await _client.GetAsync("http://localhost:5013/api/v1/task/due-date-reminder", stoppingToken);
+                    HttpResponseMessage responseMessage = await _client.GetAsync($"{_appSetting.Api.BaseUrl}/task/due-date-reminder", stoppingToken);
                     string taskJson = await responseMessage.Content.ReadAsStringAsync(stoppingToken);
                     UserResponseDto response = JsonConvert.DeserializeObject<UserResponseDto>(taskJson)!;
                     if (responseMessage.StatusCode != HttpStatusCode.OK)

@@ -1,8 +1,36 @@
 version: '3.4'
 
 services:
+  projectmanagement.api:
+    image: ${DOCKER_REGISTRY-}Jadra.Api
+    build:
+      context: .
+      dockerfile: ProjectManagement.API\Dockerfile
+    depends_on:
+      - redis
+    networks:
+      - normandy
+
   projectmanagement.worker:
-    image: ${DOCKER_REGISTRY-}projectmanagementworker
+    image: ${DOCKER_REGISTRY-}Jadra.Worker
     build:
       context: .
       dockerfile: ProjectManagement.Worker\Dockerfile
+    depends_on:
+      - redis
+    networks:
+      - normandy
+
+  redis:
+    image: 'bitnami/redis:latest'
+    environment:
+      - REDIS_PASSWORD=password123
+    restart: always
+    ports:
+      - '7777:6379'
+    networks:
+      - normandy
+
+networks:
+  normandy:
+    driver: bridge
