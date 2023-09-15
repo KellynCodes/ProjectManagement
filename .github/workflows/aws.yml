@@ -12,7 +12,7 @@ env:
   ECS_TASK_DEFINITION: jadra-api-task-def
   IMAGE_WEBAPP: jadra.api
   IMAGE_WORKER: jadra.worker
-  DOCKER_IMAGE_TAG: v1
+  DOCKER_IMAGE_TAG: latest
 
 permissions:
   contents: read
@@ -36,8 +36,10 @@ jobs:
     - name: Build and Push Docker Image
       run: |
         cd ProjectManagement.Worker
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/${{env.IMAGE_WORKER}}:latest .
-        docker push ${{ secrets.DOCKER_USERNAME }}/${{env.IMAGE_WORKER}}:latest
+        echo ${{DOCKER_IMAGE_TAG}}
+        echo ${{env.IMAGE_WORKER}}
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/${{env.IMAGE_WORKER}}:${{DOCKER_IMAGE_TAG}} .
+        docker push ${{ secrets.DOCKER_USERNAME }}/${{env.IMAGE_WORKER}}:${{DOCKER_IMAGE_TAG}}
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
