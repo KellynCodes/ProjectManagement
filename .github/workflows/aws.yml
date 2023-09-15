@@ -12,7 +12,7 @@ env:
   ECS_TASK_DEFINITION: jadra-api-task-def
   IMAGE_WEBAPP: jadra.api
   IMAGE_WORKER: jadra.worker
-  DOCKER_IMAGE_TAG: latest
+  DOCKER_IMAGE_TAG: v1
 
 permissions:
   contents: read
