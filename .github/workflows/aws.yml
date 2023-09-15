@@ -12,7 +12,9 @@ env:
   ECS_TASK_DEFINITION: jadra-api-task-def
   IMAGE_WEBAPP: jadra.api
   IMAGE_WORKER: jadra.worker 
+  IMAGE_TAG: ${{ github.sha }}
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
 
 jobs:
   build_and_push:
