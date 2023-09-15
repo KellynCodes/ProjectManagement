@@ -15,4 +15,16 @@
   <ItemGroup>
     <ProjectReference Include="..\ProjectManagement.Services\ProjectManagement.Services.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="..\.dockerignore" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="..\.dockerignore" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="..\.dockerignore" />
+  </ItemGroup>
 </Project>
