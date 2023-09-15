@@ -22,7 +22,7 @@ services:
       - normandy
       
   aws_ecr.api:
-    image:  ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_WEBAPP}-$IMAGE_TAG .
+    image:  ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_WEBAPP}-$latest .
     build:
       context: .
       dockerfile: ProjectManagement.API/Dockerfile
@@ -32,7 +32,7 @@ services:
       - normandy
 
   aws_ecr.worker:
-    image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_WORKER}-$IMAGE_TAG .
+    image: ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_WORKER}-$latest .
     build:
       context: .
       dockerfile: ProjectManagement.Worker/Dockerfile
