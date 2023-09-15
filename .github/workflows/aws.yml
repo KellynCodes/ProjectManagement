@@ -35,13 +35,13 @@ jobs:
     - name: Build and Push Docker Image to worker repository
       run: |
         cd ProjectManagement.Worker
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/jadra.worker:latest ./src
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/jadra.worker:latest .
         docker push ${{ secrets.DOCKER_USERNAME }}/jadra.worker:latest
 
     - name: Build and Push Docker Image to api repository
       run: |
         cd ProjectManagement.API
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/jadra.api:latest ./src
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/jadra.api:latest .
         docker push ${{ secrets.DOCKER_USERNAME }}/jadra.api:latest   
         cd ..
 
