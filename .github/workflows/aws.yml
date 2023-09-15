@@ -12,7 +12,6 @@ env:
   ECS_TASK_DEFINITION: jadra-api-task-def
   IMAGE_WEBAPP: jadra.api
   IMAGE_WORKER: jadra.worker 
-  IMAGE_TAG: ${{ github.sha }}
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
 
 jobs:
@@ -53,8 +52,8 @@ jobs:
         docker-compose push projectmanagement.worker
 
         # Setting ECR image names
-        export ECR_IMAGE_WEBAPP=$ECR_REGISTRY/$ECR_REPOSITORY:${{env.IMAGE_WEBAPP}}-$IMAGE_TAG
-        export ECR_IMAGE_WORKER=$ECR_REGISTRY/$ECR_REPOSITORY:${{env.IMAGE_WORKER}}-$IMAGE_TAG
+        export ECR_IMAGE_WEBAPP=$ECR_REGISTRY/$ECR_REPOSITORY:${{env.IMAGE_WEBAPP}}-v1
+        export ECR_IMAGE_WORKER=$ECR_REGISTRY/$ECR_REPOSITORY:${{env.IMAGE_WORKER}}-v1
 
         # Tagging images for ECR
         docker tag $DOCKER_USERNAME/Jadra.Api:latest $ECR_IMAGE_WEBAPP
