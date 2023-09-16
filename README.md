@@ -41,14 +41,9 @@ Users are notified:
 - **GitHub Actions**: Used for CI/CD to automate the deployment process.
   
 - **AWS ECS with ECR**: Hosts and deploys our containers for both the Web API and the background service.
+## Usage
 
 ## Setting Up / Installation
-
-Certainly! Here's the enhanced `Usage` section for your `README.md`:
-
----
-
-## Usage
 
 ### Setup and Configuration:
 
@@ -71,7 +66,7 @@ Before running the application, provide the following credentials and configurat
 
 ### Running the Application:
 
-1. **Start Services**: Begin by running the background worker service project. Once that's up and running, start the Web API.
+1. **Start Services**: Begin by running the Web API project. Once that's up and running, start the Background Worker Service.
    
 2. **Account Creation**: 
    - Upon the first run, you should create an account through the API.
