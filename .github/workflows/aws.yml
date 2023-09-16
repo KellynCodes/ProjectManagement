@@ -51,8 +51,8 @@ jobs:
         docker-compose push projectmanagement.worker
 
         # Setting ECR image names
-        export ECR_IMAGE_WEBAPP=${ secrets.ECR_REGISTRY_FOR_API }}/$ECR_REPOSITORY:${{env.IMAGE_WEBAPP}}-v1
-        export ECR_IMAGE_WORKER=${ secrets.ECR_REGISTRY_FOR_WORKER }}/$ECR_REPOSITORY:${{env.IMAGE_WORKER}}-v1
+        export ECR_IMAGE_WEBAPP=${{ secrets.ECR_REGISTRY_FOR_API }}/$ECR_REPOSITORY:${{env.IMAGE_WEBAPP}}-v1
+        export ECR_IMAGE_WORKER=${{ secrets.ECR_REGISTRY_FOR_WORKER }}/$ECR_REPOSITORY:${{env.IMAGE_WORKER}}-v1
 
         # Tagging images for ECR
         docker tag $DOCKER_USERNAME/jadra.api:latest $ECR_IMAGE_WEBAPP
