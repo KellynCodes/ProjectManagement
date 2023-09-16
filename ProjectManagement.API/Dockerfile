@@ -13,7 +13,7 @@ WORKDIR /src
 COPY ["ProjectManagement.API/ProjectManagement.API.csproj", "ProjectManagement.API/"]
 RUN dotnet restore "ProjectManagement.API/ProjectManagement.API.csproj"
 COPY . .
-WORKDIR "/ProjectManagement.API"
+WORKDIR "/src/ProjectManagement.API"
 RUN dotnet build "ProjectManagement.API.csproj" -c Release -o /app/build
 
 FROM build AS publish

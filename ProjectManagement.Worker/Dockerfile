@@ -11,7 +11,7 @@ WORKDIR /src
 COPY ["ProjectManagement.Worker/ProjectManagement.Worker.csproj", "ProjectManagement.Worker/"]
 RUN dotnet restore "ProjectManagement.Worker/ProjectManagement.Worker.csproj"
 COPY . .
-WORKDIR "ProjectManagement.Worker"
+WORKDIR "/src/ProjectManagement.Worker"
 RUN dotnet build "ProjectManagement.Worker.csproj" -c Release -o /app/build
 
 FROM build AS publish
