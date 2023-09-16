@@ -1,11 +1,5 @@
 version: '3.4'
 
-x-environment:
- - DOCKER_USERNAME=kellyncodes
- - DOCKER_PASSWORD=KellynC0de
- - ECR_REPOSITORY=jadra.api
- - ECR_REGISTRY=789593376439.dkr.ecr.us-west-1.amazonaws.com 
-
 services:
   docker.api:
     image: "${DOCKER_USERNAME}Jadra.Api:latest"
