@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   docker.api:
-    image: "${DOCKER_USERNAME}jadra.api:latest"
+    image: "${DOCKER_USERNAME}/jadra.api:latest"
     build:
       context: .
       dockerfile: ProjectManagement.API/Dockerfile
@@ -12,7 +12,7 @@ services:
       - normandy
 
   projectmanagement.worker:
-    image: "${DOCKER_USERNAME}jadra.worker:latest"
+    image: "${DOCKER_USERNAME}/jadra.worker:latest"
     build:
       context: .
       dockerfile: ProjectManagement.Worker/Dockerfile
