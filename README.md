@@ -4,6 +4,15 @@
 
 This Task Management System is a robust platform developed using ASP.NET Web API, designed to efficiently manage and notify users about various task-related activities. The system not only ensures seamless task management but also employs various cutting-edge technologies to maintain a high standard of reliability and functionality.
 
+## API Image Overview
+### Each image contains two API Group/Tag.
+
+| <h1><center> Auth and Project </center></h1>             |   
+|---------------------------------|
+| ![Auth and Project](ProjectManagement.API/wwwroot/Assets/Images/auth_project.JPG)
+| <h1><center>Task and User </center></h1>                   |
+|![Auth and Project](ProjectManagement.API/wwwroot/Assets/Images/task_user.JPG)|
+
 ## System Architecture
 
 ### Core Components:
@@ -35,6 +44,8 @@ Users are notified:
 
 ## Setting Up / Installation
 
+Certainly! Here's the enhanced `Usage` section for your `README.md`:
+
 ---
 
 ## Usage
@@ -60,7 +71,7 @@ Before running the application, provide the following credentials and configurat
 
 ### Running the Application:
 
-1. **Start Services**: Begin by running the Web api project. Once that's up and running, start the background worker service project.
+1. **Start Services**: Begin by running the background worker service project. Once that's up and running, start the Web API.
    
 2. **Account Creation**: 
    - Upon the first run, you should create an account through the API.
@@ -76,10 +87,9 @@ Before running the application, provide the following credentials and configurat
    - From the list of users, copy your user ID.
    - Use this user ID to create a new project. Upon successful project creation, make note of the project ID.
    - With both the project ID and user ID, you're all set to test other CRUD operations on the Project and Task endpoints.
-<!-- 
-- <center><h1>OR</h1></center>
 
-#### You can avoid the complexity of setting up the project and test the live project <a href="https://aws.com/ecs/kellyncodes/jadra.api">here</a> In few days to come. 
--->
+<center><h1>OR</h1></center>
+
+#### You can avoid the complexity of setting up the project and test the live project [here]("https://aws.com/ecs/kellyncodes/jadra.api")
 ---
 

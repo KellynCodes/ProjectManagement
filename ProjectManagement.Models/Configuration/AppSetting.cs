@@ -5,6 +5,7 @@ namespace ProjectManagement.Models.Configuration;
 public class AppSetting
 {
     public string ConnectionString { get; set; } = null!;
+    public string ConnString { get; set; } = null!;
     public ApiConfig Api { get; set; } = null!;
     public RedisConfig Redis { get; set; } = null!;
     public JwtConfig Jwt { get; set; } = null!;

@@ -4,6 +4,17 @@
 
 This Task Management System is a robust platform developed using ASP.NET Web API, designed to efficiently manage and notify users about various task-related activities. The system not only ensures seamless task management but also employs various cutting-edge technologies to maintain a high standard of reliability and functionality.
 
+## API Image Overview
+### Each colum contains two endpoints.
+
+| Auth and Project | Task and User |
+|----------|----------|
+| ![Auth and Project]("")
+ | Row1Col2 |
+| Row2Col1 | Row2Col2 |
+| Row3Col1 | Row3Col2 |
+
+
 ## System Architecture
 
 ### Core Components:

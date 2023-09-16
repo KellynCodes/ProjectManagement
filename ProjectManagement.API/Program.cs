@@ -21,7 +21,7 @@ AppSetting appSetting = builder.Services.BindConfigurations(builder.Configuratio
 services.AddRedisCache(appSetting.Redis);
 services.AddAsyncComponents(Configuration);
 
-services.RegisterDbContext(appSetting.ConnectionString);
+services.RegisterDbContext(appSetting.ConnString);
 services.RegisterAuthentication(appSetting.Jwt);
 // Add services to the container.
 services.SetupAppServices();
