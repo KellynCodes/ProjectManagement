@@ -56,8 +56,8 @@ jobs:
         export ECR_IMAGE_WORKER=$ECR_REGISTRY/$ECR_REPOSITORY:${{env.IMAGE_WORKER}}-v1
 
         # Tagging images for ECR
-        docker tag $DOCKER_USERNAME/Jadra.Api:latest $ECR_IMAGE_WEBAPP
-        docker tag $DOCKER_USERNAME/Jadra.Worker:latest $ECR_IMAGE_WORKER
+        docker tag $DOCKER_USERNAME/jadra.api:latest $ECR_IMAGE_WEBAPP
+        docker tag $DOCKER_USERNAME/jadra.worker:latest $ECR_IMAGE_WORKER
 
         # Pushing to ECR
         docker push $ECR_IMAGE_WEBAPP
