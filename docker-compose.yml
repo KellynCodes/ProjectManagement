@@ -22,7 +22,7 @@ services:
       - normandy
       
   aws_ecr.api:
-    image:  ${ECR_REGISTRY}/${ECR_REPOSITORY}:latest
+    image:  ${ECR_REGISTRY_FOR_API}/${ECR_REPOSITORY}:latest
     build:
       context: .
       dockerfile: ProjectManagement.API/Dockerfile
@@ -32,7 +32,7 @@ services:
       - normandy
 
   aws_ecr.worker:
-    image: ${ECR_REGISTRY}/jadra.worker:latest
+    image: ${ECR_REGISTRY_FOR_WORKER}/jadra.worker:latest
     build:
       context: .
       dockerfile: ProjectManagement.Worker/Dockerfile

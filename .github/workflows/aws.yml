@@ -44,6 +44,8 @@ jobs:
       
     - name: Build and Push to DockerHub & AWS ECR
       env:
+       ECR_REGISTRY_FOR_API: ${{ secrets.ECR_REGISTRY_FOR_API }}
+       ECR_REGISTRY_FOR_WORKER: ${{ secrets.ECR_REGISTRY_FOR_API }}
        IMAGE_TAG: ${{ github.sha }}
       run: |
         docker-compose build
@@ -51,8 +53,8 @@ jobs:
         docker-compose push projectmanagement.worker
 
         # Setting ECR image names
-        export ECR_IMAGE_WEBAPP=${{ secrets.ECR_REGISTRY_FOR_API }}/$ECR_REPOSITORY:${{env.IMAGE_WEBAPP}}-v1
-        export ECR_IMAGE_WORKER=${{ secrets.ECR_REGISTRY_FOR_WORKER }}/$ECR_REPOSITORY:${{env.IMAGE_WORKER}}-v1
+        export ECR_IMAGE_WEBAPP=$ECR_REGISTRY_FOR_API/jadra.api:${{env.IMAGE_WEBAPP}}-v1
+        export ECR_IMAGE_WORKER=$ECR_REGISTRY_FOR_WORKER/jadra.worker:${{env.IMAGE_WORKER}}-v1
 
         # Tagging images for ECR
         docker tag $DOCKER_USERNAME/jadra.api:latest $ECR_IMAGE_WEBAPP
