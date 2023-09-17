@@ -14,7 +14,6 @@ var builder = WebApplication.CreateBuilder(args);
 IConfiguration Configuration = builder.Configuration;
 IServiceCollection services = builder.Services;
 
-AppSetting app = Configuration.Get<AppSetting>()!;
 AppSetting appSetting = builder.Services.BindConfigurations(builder.Configuration);
 
 services.AddRedisCache(appSetting.Redis);
