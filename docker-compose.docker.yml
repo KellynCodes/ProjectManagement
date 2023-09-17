@@ -1,0 +1,22 @@
+version: "3.4"
+
+services:
+  TASKMANAGEMENT_API:
+    image: "${DOCKER_USERNAME}/jedra.api:latest"
+    build:
+      context: .
+      dockerfile: ProjectManagement.API/Dockerfile
+    networks:
+      - task_managment
+
+  TASKMANAGEMENT_WORKER:
+    image: "${DOCKER_USERNAME}/jedra.worker:latest"
+    build:
+      context: .
+      dockerfile: ProjectManagement.Worker/Dockerfile
+    networks:
+      - task_managment
+      
+networks:
+  task_managment:
+    driver: bridge

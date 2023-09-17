@@ -41,7 +41,7 @@ jobs:
 
     - name: Build and Push to DockerHub
       run: |
-        docker-compose build
+        docker-compose -f docker-compose.docker.yml build
         docker-compose push TASKMANAGEMENT_API
         docker-compose push TASKMANAGEMENT_WORKER
 
@@ -61,7 +61,7 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
       run: |
-        docker-compose build
+        docker-compose -f docker-compose.aws.yml build
         docker-compose push ECR_API
         docker-compose push ECR_WORKER
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_API:$IMAGE_TAG" >> $GITHUB_OUTPUT
