@@ -1,8 +1,8 @@
-version: '3.4'
+version: "3.4"
 
 services:
-  docker.api:
-    image: "${DOCKER_USERNAME}/jadra.api:latest"
+  TASKMANAGEMENT_API:
+    image: "${DOCKER_USERNAME}/jedra.api:latest"
     build:
       context: .
       dockerfile: ProjectManagement.API/Dockerfile
@@ -11,43 +11,13 @@ services:
     networks:
       - normandy
 
-  projectmanagement.worker:
-    image: "${DOCKER_USERNAME}/jadra.worker:latest"
+  TASKMANAGEMENT_WORKER:
+    image: "${DOCKER_USERNAME}/jedra.worker:latest"
     build:
       context: .
       dockerfile: ProjectManagement.Worker/Dockerfile
     depends_on:
       - redis
-    networks:
-      - normandy
-      
-  aws_ecr.api:
-    image:  ${ECR_REGISTRY_FOR_API}/${ECR_REPOSITORY}:latest
-    build:
-      context: .
-      dockerfile: ProjectManagement.API/Dockerfile
-    depends_on:
-      - redis
-    networks:
-      - normandy
-
-  aws_ecr.worker:
-    image: ${ECR_REGISTRY_FOR_WORKER}/jadra.worker:latest
-    build:
-      context: .
-      dockerfile: ProjectManagement.Worker/Dockerfile
-    depends_on:
-      - redis
-    networks:
-      - normandy
-
-  redis:
-    image: 'bitnami/redis:latest'
-    environment:
-      - REDIS_PASSWORD=password123
-    restart: always
-    ports:
-      - '7777:6379'
     networks:
       - normandy
 
