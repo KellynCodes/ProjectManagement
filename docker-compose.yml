@@ -6,21 +6,34 @@ services:
     build:
       context: .
       dockerfile: ProjectManagement.API/Dockerfile
-    depends_on:
-      - redis
     networks:
-      - normandy
+      - task_managment
 
   TASKMANAGEMENT_WORKER:
     image: "${DOCKER_USERNAME}/jedra.worker:latest"
     build:
       context: .
       dockerfile: ProjectManagement.Worker/Dockerfile
-    depends_on:
-      - redis
     networks:
-      - normandy
+      - task_managment
+      
+      
+  ECR_API:
+    image: "${ECR_REGISTRY}/${ECR_REPOSITORY_API}:${IMAGE_TAG}"
+    build:
+      context: .
+      dockerfile: ProjectManagement.API/Dockerfile
+    networks:
+      - task_managment
+  
+  ECR_WORKER:
+    image: "${ECR_REGISTRY}/${ECR_REPOSITORY_WORKER}:${IMAGE_TAG}"
+    build:
+      context: .
+      dockerfile: ProjectManagement.Worker/Dockerfile
+    networks:
+      - task_managment
 
 networks:
-  normandy:
+  task_managment:
     driver: bridge
