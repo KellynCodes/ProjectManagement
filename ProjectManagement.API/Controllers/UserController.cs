@@ -9,6 +9,7 @@ namespace ProjectManagement.API.Controllers;
 [Route("api/v{version:apiVersion}/user")]
 [ApiVersion("1.0")]
 [ApiController]
+[Authorize]
 public class UserController : BaseController
 {
     private IUserService _userService;
