@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ProjectManagement.API.Controllers.Shared;
 using ProjectManagement.Models.Utility;
 using ProjectManagement.Services.Domain.ProjecT;
