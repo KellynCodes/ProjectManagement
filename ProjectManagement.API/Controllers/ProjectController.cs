@@ -10,6 +10,7 @@ namespace ProjectManagement.API.Controllers;
 [Route("api/v{version:apiVersion}/project")]
 [ApiVersion("1.0")]
 [ApiController]
+[Authorize]
 public class ProjectController : BaseController
 {
     private readonly IProjectService _projectService;
